@@ -41,24 +41,78 @@ const moviesController = {
                 res.render('recommendedMovies.ejs', {movies});
             });
     }, //Aqui debemos modificar y completar lo necesario para trabajar con el CRUD
-    /* add: function (req, res) {
-        // TODO   
+    add: function (req, res) {
+        db.Genre.findAll()
+        .then(genres => {
+            return res.render('moviesAdd',{genres}) 
+        }) 
     },
     create: function (req, res) {
-        // TODO
+        let errors = validationResult(req)
+
+        if (errors.isEmpty()) {
+        db.Movie.create({
+            title: req.body.title,
+            rating: +req.body.rating,
+            awards: +req.body.awards,
+            release_date: Date(req.body.release_date),
+            length: +req.body.length,
+            genre_id: +req.body.genre,
+            created_at: new Date,
+            update_at: new Date
+        })
+        .then(movie => {
+            //return res.send(movie)
+            res.redirect('/movies')
+        })
+    } else {
+        res.render('moviesAdd', {errors})
+    }
     },
     edit: function(req, res) {
-        // TODO
+        db.Movie.findByPk(req.params.id)
+            .then(movie => {
+                res.render('moviesEdit', {Movie:movie});
+            })
+            .catch(error => res.send(error))
     },
     update: function (req,res) {
-        // TODO
+        let idParams = +req.params.id
+        
+        db.Movie.update({
+            title: req.body.title,
+            rating: +req.body.rating,
+            awards: +req.body.awards,
+            release_date: req.body.release_date,
+            length: +req.body.length
+        },{
+            where:{id:idParams}
+        })
+        .then(pelicula => {
+            res.redirect(`/movies/detail/${idParams}`)
+        })
+        .catch(errors => res.sens(errors))
     },
     delete: function (req, res) {
-        // TODO
+        let idParams = +req.params.id
+
+        db.Movie.findOne({
+            where: {id:idParams}
+        })
+        .then(movie => {
+            res.render('delete',{Movie:movie})
+        })
     },
     destroy: function (req, res) {
-        // TODO
-    } */
+        let idParams = +req.params.id
+
+        db.Movie.destroy({
+            where:{id:idParams}
+        })
+        .then(pelicula => {
+            res.redirect('/movies')
+        })
+    }
 
 }
 
